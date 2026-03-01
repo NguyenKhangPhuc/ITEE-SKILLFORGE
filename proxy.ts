@@ -3,8 +3,7 @@ import { updateSession } from "./app/utils/supabase/proxy"
 
 
 export async function proxy(request: NextRequest) {
-    console.log("URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
-    console.log("KEY:", process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)
+    console.log('Checking page')
     return await updateSession(request)
 }
 

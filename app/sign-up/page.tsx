@@ -2,13 +2,14 @@
 import HttpsIcon from '@mui/icons-material/Https';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import PersonIcon from '@mui/icons-material/Person';
 import { useForm } from 'react-hook-form';
-import { LoginForm } from '../types/form_data';
-import Link from 'next/link';
+import { LoginForm, SignupForm } from '../types/form_data';
 import { createClient } from '../utils/supabase/client';
-import { login } from '../actions/authentication';
-import { useNotification } from '../context/NotificationContext';
+import { signup } from '../actions/authentication';
 import { AuthError } from '@supabase/supabase-js';
+import { useNotification } from '../context/NotificationContext';
+import Link from 'next/link';
 const Home = () => {
     const { showNotification } = useNotification();
     const supabase = createClient();
@@ -16,23 +17,42 @@ const Home = () => {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<LoginForm>()
+    } = useForm<SignupForm>()
 
-    const onSubmit = async (userInfo: LoginForm) => {
+    const onSubmit = async (signupInfo: SignupForm) => {
         try {
-            await login(userInfo)
+            await signup(signupInfo, window.location.origin)
         } catch (error) {
             console.log(error + `--- ${error == 'Error: NEXT_REDIRECT' ? 'true' : 'false'}`)
             if (error instanceof Error && error.message !== 'NEXT_REDIRECT') {
 
                 showNotification(error.message)
             }
-
         }
     }
+
     return (
         <div className="w-full min-h-screen screen-bg flex justify-center items-center">
             <form className="flex flex-col gap-2 bg-white p-8 min-w-[450px] rounded-2xl font-roboto-mono" onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex flex-col">
+                    <label className="text-[#151717] mb-1 font-semibold">Full Name</label>
+                    <div className="border border-gray-200 rounded-xl h-12 flex items-center px-2 focus-within:border-blue-600 transition text-black/50">
+                        <PersonIcon />
+                        <input
+                            type="text"
+                            placeholder="Enter your Full Name"
+                            className="flex-1 h-full border-none outline-none px-2 placeholder-gray-400  text-black "
+                            {...register("fullName", {
+                                required: "Full name is required",
+                            })}
+                        />
+                    </div>
+                    {errors.fullName && (
+                        <p className="text-red-500 text-sm mt-1">
+                            {errors.fullName.message}
+                        </p>
+                    )}
+                </div>
                 <div className="flex flex-col">
                     <label className="text-[#151717] mb-1 font-semibold">Email</label>
                     <div className="border border-gray-200 rounded-xl h-12 flex items-center px-2 focus-within:border-blue-600 transition text-black/50">
@@ -57,7 +77,7 @@ const Home = () => {
                     )}
                 </div>
 
-                <div className="flex flex-col mt-4">
+                <div className="flex flex-col ">
                     <label className="text-[#151717] font-semibold mb-1">Password</label>
                     <div className="border border-gray-200 rounded-xl h-12 flex items-center px-2 focus-within:border-blue-600 transition text-black/50">
                         <HttpsIcon />
@@ -89,21 +109,21 @@ const Home = () => {
                     <span className="text-blue-600 font-medium text-sm cursor-pointer">Forgot password?</span>
                 </div>
 
-                <button className="mt-5 w-full text-white font-medium rounded-xl text-base uppercase login_btn"><i className="animation"></i>Sign In<i className="animation"></i>
+                <button className="mt-5 w-full text-white font-medium rounded-xl text-base uppercase login_btn"><i className="animation"></i>Sign Up<i className="animation"></i>
                 </button>
 
                 <p className="text-center text-sm text-black mt-3">
-                    Don&apos;t have an account? <Link href={'/sign-up'} className="text-blue-600 font-medium cursor-pointer">Sign Up</Link>
+                    Already have an account? <Link href={'/login'} className="text-blue-600 font-medium cursor-pointer">Sign In</Link>
                 </p>
 
                 <p className="text-center text-sm text-black mt-3">OR</p>
 
                 <div className="flex gap-2 mt-3 font-mono text-black">
 
-                    <button className="flex-1 flex gap-2 justify-center items-center gap-2 h-12 rounded-xl border border-gray-400 bg-white font-medium transition hover:border-blue-600">
+                    <div className="flex-1 cursor-pointer flex gap-2 justify-center items-center gap-2 h-12 rounded-xl border border-gray-400 bg-white font-medium transition hover:border-blue-600">
                         <GitHubIcon />
                         <div>Github</div>
-                    </button>
+                    </div>
 
                 </div>
             </form>

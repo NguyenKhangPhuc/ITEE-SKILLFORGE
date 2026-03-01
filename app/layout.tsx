@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Roboto_Mono } from "next/font/google";
 
 import "./globals.css";
+import NotificationCard from "./components/notification";
+import { NotificationProvider } from "./context/NotificationContext";
+import NavbarServer from "./components/navbar_server";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -21,11 +24,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${robotoMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <NotificationProvider>
+        <body
+          className={`${robotoMono.variable} antialiased`}
+        >
+          <NavbarServer />
+          <NotificationCard />
+          <main className="mt-16"> {children}</main>
+        </body>
+      </NotificationProvider>
+
     </html>
   );
 }
