@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { LoginForm, SignupForm } from '../types/form_data';
 import { createClient } from '../utils/supabase/client';
 import { signup } from '../actions/authentication';
-import { AuthError } from '@supabase/supabase-js';
 import { useNotification } from '../context/NotificationContext';
 import Link from 'next/link';
 const Home = () => {

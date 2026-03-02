@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link"
-import { AuthError, User } from "@supabase/supabase-js"
+import { User } from "@supabase/supabase-js"
 import { signout } from "../actions/authentication"
 import { useNotification } from "../context/NotificationContext"
 import { useEffect, useState } from "react"
@@ -32,7 +32,7 @@ const NavBar = ({ initialUser }: { initialUser: User | null }) => {
                         ITEE SKILLFORGE
                     </div>
 
-                    <div className="hidden md:flex space-x-8 items-center">
+                    <div className="hidden md:flex gap-6 items-center">
                         <Link
                             href="#about"
                             className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors duration-200"
@@ -46,7 +46,7 @@ const NavBar = ({ initialUser }: { initialUser: User | null }) => {
                             Jobs
                         </Link>
                         <Link
-                            href="#events"
+                            href="/events"
                             className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors duration-200"
                         >
                             Events

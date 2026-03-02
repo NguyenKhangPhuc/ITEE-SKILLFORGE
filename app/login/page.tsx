@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { createClient } from '../utils/supabase/client';
 import { login } from '../actions/authentication';
 import { useNotification } from '../context/NotificationContext';
-import { AuthError } from '@supabase/supabase-js';
 const Home = () => {
     const { showNotification } = useNotification();
     const supabase = createClient();
@@ -17,7 +16,14 @@ const Home = () => {
         handleSubmit,
         formState: { errors }
     } = useForm<LoginForm>()
-
+    const handleLoginWithGithub = async () => {
+        await supabase.auth.signInWithOAuth({
+            provider: 'github',
+            options: {
+                redirectTo: `${window.location.origin}/auth/callback`,
+            },
+        })
+    }
     const onSubmit = async (userInfo: LoginForm) => {
         try {
             await login(userInfo)
@@ -100,10 +106,13 @@ const Home = () => {
 
                 <div className="flex gap-2 mt-3 font-mono text-black">
 
-                    <button className="flex-1 flex gap-2 justify-center items-center gap-2 h-12 rounded-xl border border-gray-400 bg-white font-medium transition hover:border-blue-600">
+                    <div
+                        className="flex-1 flex gap-2 justify-center items-center gap-2 h-12 rounded-xl border border-gray-400 bg-white font-medium transition hover:border-blue-600"
+                        onClick={() => handleLoginWithGithub()}
+                    >
                         <GitHubIcon />
                         <div>Github</div>
-                    </button>
+                    </div>
 
                 </div>
             </form>
