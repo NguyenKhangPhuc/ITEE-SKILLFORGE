@@ -3,26 +3,29 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '../utils/supabase/server'
-import { EventAttributes } from '../types/event'
+import { Event, EventInsert } from '../types/event'
 import { title } from 'process'
 import { EVENT_STATUS } from '../types/enum'
+import { PostgrestError } from '@supabase/supabase-js'
 
-export async function createEvent(event: EventAttributes) {
+
+
+export async function createEvent(event: EventInsert, challenges: Array<EventInsert>) {
     const supabase = await createClient();
 
     const { data: user } = await supabase.auth.getUser()
 
-    const { data, error } = await supabase.from("events").insert([
+    const { data, error }: { data: Event | null, error: PostgrestError | null } = await supabase.from("events").insert([
         {
             title: event.title,
-            poster_path: event.posterPath,
-            short_description: event.shortDescription,
+            poster_path: event.poster_path,
+            short_description: event.short_description,
             content: event.content,
             location: event.location,
-            max_group_members: event.maxGroupMembers,
-            start_date: event.startDate,
-            end_date: event.endDate,
-            organized_date: event.organizedDate,
+            max_group_members: event.max_group_members,
+            start_date: event.start_date,
+            end_date: event.end_date,
+            organized_date: event.organized_date,
             status: EVENT_STATUS.ONGOING,
             owner_id: user.user?.id
         },
@@ -30,6 +33,17 @@ export async function createEvent(event: EventAttributes) {
 
     if (error) {
         throw new Error(error.message)
+    }
+
+    const updatedChallenges = challenges.map(challenge => ({
+        ...challenge,
+        event_id: data?.id
+    }));
+
+    const { error: challengeError } = await supabase.from("event_challenges").insert(updatedChallenges)
+
+    if (challengeError) {
+        throw new Error(challengeError.message)
     }
 
     revalidatePath('/events');

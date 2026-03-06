@@ -1,32 +1,36 @@
 'use client'
 import { createEvent } from "@/app/actions/events"
 import { useNotification } from "@/app/context/NotificationContext"
-import { EventAttributes } from "@/app/types/event"
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor"
 import { Editor } from "@tiptap/core"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { SetStateAction, useState } from "react"
 import { useForm } from "react-hook-form"
+import ClearIcon from '@mui/icons-material/Clear';
+import { Event, EventInsert } from "@/app/types/event"
+import { EventChallengeInsert } from "@/app/types/event_challenges"
+
 
 const Home = () => {
     const {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<EventAttributes>()
+    } = useForm<EventInsert>()
 
     const router = useRouter()
     const { showNotification } = useNotification()
 
     const [editorValue, setEditorValue] = useState<Editor | null>(null)
     const [posterPath, setPosterPath] = useState<string | undefined>(undefined);
-    const handleCreateNewEvent = async (event: EventAttributes) => {
+    const [challenges, setChallenges] = useState<Array<EventChallengeInsert>>([])
+    const handleCreateNewEvent = async (event: EventInsert) => {
         event.content = editorValue?.getHTML()
-        event.posterPath = posterPath
+        event.poster_path = posterPath
         try {
-            const data = await createEvent(event)
+            const data = await createEvent(event, challenges)
             showNotification("Create event successfully")
-            router.push(`/events/${data.id}`)
+            router.push(`/events/${data!.id}`)
         } catch (error) {
             if (error instanceof Error) {
                 showNotification(error.message)
@@ -59,26 +63,26 @@ const Home = () => {
                         <div className="input-group w-1/2">
                             <label className="event_input_label">Start Date</label>
                             <input autoComplete="off" placeholder="Start Date" id="StartDate" className="event_input outline-none w-full  h-[40px] placeholder:font-bold " type="date"
-                                {...register('startDate', {
+                                {...register('start_date', {
                                     required: "Start date is required",
                                 })}
                             />
-                            {errors.startDate && (
+                            {errors.start_date && (
                                 <p className="text-red-500 text-sm mt-1">
-                                    {errors.startDate.message}
+                                    {errors.start_date.message}
                                 </p>
                             )}
                         </div>
                         <div className="input-group w-1/2">
                             <label className="event_input_label">End Date</label>
                             <input autoComplete="off" id="EndDate" placeholder="End Date" className="event_input outline-none w-full  h-[40px] placeholder:font-bold" type="date"
-                                {...register('endDate', {
+                                {...register('end_date', {
                                     required: "End date is required",
                                 })}
                             />
-                            {errors.endDate && (
+                            {errors.end_date && (
                                 <p className="text-red-500 text-sm mt-1">
-                                    {errors.endDate.message}
+                                    {errors.end_date.message}
                                 </p>
                             )}
                         </div>
@@ -100,13 +104,13 @@ const Home = () => {
                         <div className="input-group w-1/2">
                             <label className="event_input_label">Organized Date</label>
                             <input autoComplete="off" id="OrganizedDate" placeholder="Organized Date" className="event_input outline-none w-full  h-[40px] placeholder:font-bold" type="datetime-local"
-                                {...register('organizedDate', {
+                                {...register('organized_date', {
                                     required: "Organized Date is required",
                                 })}
                             />
-                            {errors.organizedDate && (
+                            {errors.organized_date && (
                                 <p className="text-red-500 text-sm mt-1">
-                                    {errors.organizedDate.message}
+                                    {errors.organized_date.message}
                                 </p>
                             )}
                         </div>
@@ -119,29 +123,32 @@ const Home = () => {
                             placeholder="Max member per teams"
                             className="event_input outline-none w-[80px]  h-[40px] placeholder:font-bold"
                             type="number"
-                            {...register('maxGroupMembers', {
+                            {...register('max_group_members', {
                                 required: "Max group members is required",
                             })}
                         />
-                        {errors.maxGroupMembers && (
+                        {errors.max_group_members && (
                             <p className="text-red-500 text-sm mt-1">
-                                {errors.maxGroupMembers.message}
+                                {errors.max_group_members.message}
                             </p>
                         )}
                     </div>
+
+                    <ChallengeCreationForm challenges={challenges} setChallenges={setChallenges} />
+
                     <div className="input-group w-full ">
                         <label className="event_input_label">Short Description</label>
                         <textarea
                             autoComplete="off"
                             placeholder="Short Description"
                             className="event_input outline-none w-full placeholder:font-bold h-[80px]"
-                            {...register('shortDescription', {
+                            {...register('short_description', {
                                 required: "Short description members is required",
                             })}
                         />
-                        {errors.shortDescription && (
+                        {errors.short_description && (
                             <p className="text-red-500 text-sm mt-1">
-                                {errors.shortDescription.message}
+                                {errors.short_description.message}
                             </p>
                         )}
                     </div>
@@ -157,6 +164,86 @@ const Home = () => {
                 </form>
             </div>
         </div>
+    )
+}
+
+const ChallengeCreationForm = ({ challenges, setChallenges }: { challenges: Array<EventChallengeInsert>, setChallenges: React.Dispatch<SetStateAction<Array<EventChallengeInsert>>> }) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm<EventChallengeInsert>()
+
+
+    const handleCreateNewChallenge = (challenge: EventChallengeInsert) => {
+        setChallenges([...challenges, challenge])
+        reset()
+    }
+    const handleDeleteChallenge = (index: number) => {
+        setChallenges(prev => prev.filter((_, i) => i !== index))
+    }
+
+
+    return (
+        <>
+            <div className="w-full flex gap-5">
+                <div className="input-group w-1/2">
+                    <label className="event_input_label">Company</label>
+                    <input autoComplete="off" placeholder="Company name" id="Title" className="event_input outline-none w-full  h-[40px] placeholder:font-bold " type="text"
+
+                        {...register('company_name', {
+                            required: "Company name for challenge is required",
+                        })} />
+                    {errors.company_name && (
+                        <p className="text-red-500 text-sm mt-1">
+                            {errors.company_name.message}
+                        </p>
+                    )}
+                </div>
+                <div className="input-group w-1/2">
+                    <label className="event_input_label">Title</label>
+                    <input autoComplete="off" placeholder="Challenge title" id="Title" className="event_input outline-none w-full  h-[40px] placeholder:font-bold " type="text"
+
+                        {...register('title', {
+                            required: "Challenge title is required",
+                        })} />
+                    {errors.title && (
+                        <p className="text-red-500 text-sm mt-1">
+                            {errors.title.message}
+                        </p>
+                    )}
+                </div>
+            </div>
+            {challenges.length > 0 && (
+                <div className="flex gap-3 flex-wrap">
+                    {challenges.map((challenge, index) => (
+                        <div
+                            key={index}
+                            className="flex items-center gap-2 px-3 py-1 bg-gray-200 rounded-md"
+                        >
+                            <span className="font-semibold">{challenge.title}</span>
+
+                            <button
+                                type="button"
+                                onClick={() => handleDeleteChallenge(index)}
+                                className="cursor-pointer hover:text-red-500"
+                            >
+                                <ClearIcon />
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+            <button
+                type="submit"
+                className="cursor-pointer px-6 py-2 rounded-md bg-black hover:bg-black/90 transition-colors duration-300 text-white"
+                onClick={handleSubmit(handleCreateNewChallenge)}
+            >
+                Add challenge
+            </button>
+        </>
+
     )
 }
 

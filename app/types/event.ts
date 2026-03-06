@@ -1,18 +1,5 @@
-import { EVENT_STATUS } from "./enum";
+import { Database } from "./database.types";
 
-export interface EventAttributes {
-    id?: string;
-    title: string;
-    posterPath?: string;
-    shortDescription: string;
-    status?: EVENT_STATUS;
-    content?: string;
-    location: string;
-    maxGroupMembers: number;
-    startDate: Date;
-    endDate: Date;
-    organizedDate: Date;
-    createdAt?: Date;
-    updatedAt?: Date
-    ownerId: string;
-}
+export type Event = Database["public"]["Tables"]["events"]["Row"]
+
+export type EventInsert = Database["public"]["Tables"]["events"]["Insert"]

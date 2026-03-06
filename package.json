@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:types": "supabase gen types typescript --local > src/types/database.types.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
