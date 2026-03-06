@@ -6,7 +6,7 @@ export interface EventAttributes {
     posterPath?: string;
     shortDescription: string;
     status?: EVENT_STATUS;
-    content: string;
+    content?: string;
     location: string;
     maxGroupMembers: number;
     startDate: Date;
@@ -14,4 +14,5 @@ export interface EventAttributes {
     organizedDate: Date;
     createdAt?: Date;
     updatedAt?: Date
+    ownerId: string;
 }

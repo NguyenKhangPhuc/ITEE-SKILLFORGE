@@ -22,14 +22,14 @@ export function ThemeToggle() {
     const initialDarkMode =
       !!document.querySelector('meta[name="color-scheme"][content="dark"]') ||
       window.matchMedia("(prefers-color-scheme: dark)").matches
-    setIsDarkMode(true)
+    setIsDarkMode(false)
   }, [])
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDarkMode)
   }, [isDarkMode])
 
-  const toggleDarkMode = () => setIsDarkMode((isDark) => !isDark)
+  const toggleDarkMode = () => setIsDarkMode((isDark) => false)
 
   return (
     <Button

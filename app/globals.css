@@ -9,7 +9,7 @@
 }
 
 .screen-bg {
-  background-color: #4d4b49;
+  background-color: #ffffff;
 }
 
 :root {
@@ -148,44 +148,7 @@
   cursor: pointer;
 }
 
-/* From Uiverse.io by namecho */
-.create_button,
-.create_button::after {
-  padding: 16px 20px;
-  font-size: 18px;
-  background: linear-gradient(45deg, transparent 5%, #ffffff 5%);
-  border: 0;
-  color: #000000;
-  letter-spacing: 3px;
-  line-height: 1;
-  box-shadow: 6px 0px 0px #000000;
-  outline: transparent;
-  position: relative;
-}
 
-.create_button::after {
-  --slice-0: inset(50% 50% 50% 50%);
-  --slice-1: inset(80% -6px 0 0);
-  --slice-2: inset(50% -6px 30% 0);
-  --slice-3: inset(10% -6px 85% 0);
-  --slice-4: inset(40% -6px 43% 0);
-  --slice-5: inset(80% -6px 5% 0);
-  content: "Create New Event";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent 3%, #00e6f6 3%, #00e6f6 5%, #000000 5%);
-  text-shadow: -3px -3px 0px #f8f005, 3px 3px 0px #00e6f6;
-  clip-path: var(--slice-0);
-}
-
-.create_button:hover::after {
-  animation: 1s glitch;
-  animation-timing-function: steps(2, end);
-}
 
 @keyframes glitch {
   0% {
@@ -247,7 +210,7 @@
 
 .event_input {
 
-  background-color: #999999;
+  background-color: #cecece;
   border-radius: .5rem;
   padding: 0 1rem;
   border: 2px solid transparent;
@@ -255,7 +218,7 @@
   transition: border-color .3s cubic-bezier(.25, .01, .25, 1) 0s, color .3s cubic-bezier(.25, .01, .25, 1) 0s, background .2s cubic-bezier(.25, .01, .25, 1) 0s;
 }
 
-.label {
+.event_input_label {
   display: block;
   margin-bottom: .3rem;
   font-size: .9rem;
@@ -265,13 +228,102 @@
 }
 
 .event_input:hover,
-.input:focus,
+.event_input:focus,
 .input-group:hover .input {
   outline: none;
   border-color: #05060f;
 }
 
-.input-group:hover .label,
-.input:focus {
-  color: #ffffff;
+.input-group:hover .event_input_label,
+.event_input:focus {
+  color: #000000;
+}
+
+/* From Uiverse.io by gharsh11032000 */
+.create-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 36px;
+  border: 4px solid;
+  border-color: transparent;
+  font-size: 16px;
+  background-color: inherit;
+  border-radius: 100px;
+  font-weight: 600;
+  color: black;
+  box-shadow: 0 0 0 2px black;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.create-button svg {
+  position: absolute;
+  width: 24px;
+  fill: black;
+  z-index: 9;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.create-button .arr-1 {
+  right: 16px;
+}
+
+.create-button .arr-2 {
+  left: -25%;
+}
+
+.create-button .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.create-button .text {
+  position: relative;
+  z-index: 1;
+  transform: translateX(-12px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.create-button:hover {
+  box-shadow: 0 0 0 12px transparent;
+  color: white;
+  border-radius: 12px;
+}
+
+.create-button:hover .arr-1 {
+  right: -25%;
+}
+
+.create-button:hover .arr-2 {
+  left: 16px;
+}
+
+.create-button:hover .text {
+  transform: translateX(12px);
+}
+
+.create-button:hover svg {
+  fill: white;
+}
+
+.create-button:active {
+  scale: 0.95;
+  box-shadow: 0 0 0 4px greenyellow;
+}
+
+.create-button:hover .circle {
+  width: 220px;
+  height: 220px;
+  opacity: 1;
 }

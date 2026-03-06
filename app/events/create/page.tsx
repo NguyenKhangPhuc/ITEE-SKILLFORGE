@@ -1,7 +1,10 @@
 'use client'
+import { createEvent } from "@/app/actions/events"
+import { useNotification } from "@/app/context/NotificationContext"
 import { EventAttributes } from "@/app/types/event"
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor"
 import { Editor } from "@tiptap/core"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -12,11 +15,25 @@ const Home = () => {
         formState: { errors }
     } = useForm<EventAttributes>()
 
-    const [editorValue, setEditorValue] = useState<Editor | null>(null)
+    const router = useRouter()
+    const { showNotification } = useNotification()
 
-    const handleCreateNewEvent = (event: EventAttributes) => {
-        console.log(event)
-        console.log(editorValue?.getHTML())
+    const [editorValue, setEditorValue] = useState<Editor | null>(null)
+    const [posterPath, setPosterPath] = useState<string | undefined>(undefined);
+    const handleCreateNewEvent = async (event: EventAttributes) => {
+        event.content = editorValue?.getHTML()
+        event.posterPath = posterPath
+        try {
+            const data = await createEvent(event)
+            showNotification("Create event successfully")
+            router.push(`/events/${data.id}`)
+        } catch (error) {
+            if (error instanceof Error) {
+                showNotification(error.message)
+            } else {
+                showNotification("Unknown error when create the event")
+            }
+        }
     }
 
     return (
@@ -25,7 +42,7 @@ const Home = () => {
                 <form className="flex flex-col pt-5 pb-10 gap-5 items-start" onSubmit={handleSubmit(handleCreateNewEvent)}>
                     <div className="w-full flex gap-5">
                         <div className="input-group w-full">
-                            <label className="label">Title</label>
+                            <label className="event_input_label">Title</label>
                             <input autoComplete="off" placeholder="Project title" id="Title" className="event_input outline-none w-full  h-[40px] placeholder:font-bold " type="text"
 
                                 {...register('title', {
@@ -40,7 +57,7 @@ const Home = () => {
                     </div>
                     <div className="w-full flex gap-5">
                         <div className="input-group w-1/2">
-                            <label className="label">Start Date</label>
+                            <label className="event_input_label">Start Date</label>
                             <input autoComplete="off" placeholder="Start Date" id="StartDate" className="event_input outline-none w-full  h-[40px] placeholder:font-bold " type="date"
                                 {...register('startDate', {
                                     required: "Start date is required",
@@ -53,7 +70,7 @@ const Home = () => {
                             )}
                         </div>
                         <div className="input-group w-1/2">
-                            <label className="label">End Date</label>
+                            <label className="event_input_label">End Date</label>
                             <input autoComplete="off" id="EndDate" placeholder="End Date" className="event_input outline-none w-full  h-[40px] placeholder:font-bold" type="date"
                                 {...register('endDate', {
                                     required: "End date is required",
@@ -68,7 +85,7 @@ const Home = () => {
                     </div>
                     <div className="w-full flex gap-5">
                         <div className="input-group w-1/2">
-                            <label className="label">Location</label>
+                            <label className="event_input_label">Location</label>
                             <input autoComplete="off" placeholder="Location" id="Location" className="event_input outline-none w-full  h-[40px] placeholder:font-bold " type="text"
                                 {...register('location', {
                                     required: "Location is required",
@@ -81,7 +98,7 @@ const Home = () => {
                             )}
                         </div>
                         <div className="input-group w-1/2">
-                            <label className="label">Organized Date</label>
+                            <label className="event_input_label">Organized Date</label>
                             <input autoComplete="off" id="OrganizedDate" placeholder="Organized Date" className="event_input outline-none w-full  h-[40px] placeholder:font-bold" type="datetime-local"
                                 {...register('organizedDate', {
                                     required: "Organized Date is required",
@@ -95,7 +112,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="input-group w-full">
-                        <label className="label">Max member per teams</label>
+                        <label className="event_input_label">Max member per teams</label>
                         <input autoComplete="off" min="1"
                             step="1"
                             id="MaxMember"
@@ -113,7 +130,7 @@ const Home = () => {
                         )}
                     </div>
                     <div className="input-group w-full ">
-                        <label className="label">Short Description</label>
+                        <label className="event_input_label">Short Description</label>
                         <textarea
                             autoComplete="off"
                             placeholder="Short Description"
@@ -133,7 +150,7 @@ const Home = () => {
                     </div>
                     <button
                         type="submit"
-                        className="cursor-pointer px-6 py-2 rounded-md bg-white/20 hover:bg-white/30 transition-colors duration-300 text-white"
+                        className="cursor-pointer px-6 py-2 rounded-md bg-black/20 hover:bg-black/30 transition-colors duration-300 text-black"
                     >
                         Create New
                     </button>
