@@ -178,7 +178,10 @@ const ChallengeCreationForm = ({ challenges, setChallenges }: { challenges: Arra
 
     const handleCreateNewChallenge = (challenge: EventChallengeInsert) => {
         setChallenges([...challenges, challenge])
-        reset()
+        reset({
+            company_name: "",
+            title: ""
+        });
     }
     const handleDeleteChallenge = (index: number) => {
         setChallenges(prev => prev.filter((_, i) => i !== index))
@@ -236,9 +239,9 @@ const ChallengeCreationForm = ({ challenges, setChallenges }: { challenges: Arra
                 </div>
             )}
             <button
-                type="submit"
                 className="cursor-pointer px-6 py-2 rounded-md bg-black hover:bg-black/90 transition-colors duration-300 text-white"
                 onClick={handleSubmit(handleCreateNewChallenge)}
+                type="button"
             >
                 Add challenge
             </button>

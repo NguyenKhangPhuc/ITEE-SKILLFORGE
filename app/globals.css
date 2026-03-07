@@ -12,27 +12,6 @@
   background-color: #ffffff;
 }
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-
-
 .login_btn {
   outline: 0;
   display: inline-flex;
@@ -326,4 +305,55 @@
   width: 220px;
   height: 220px;
   opacity: 1;
+}
+
+.duration-300 {
+  transition: all;
+  transition-duration: 300ms;
+}
+
+
+
+/* From Uiverse.io by KSAplay */
+.checkbox_container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox_container {
+  position: relative;
+  cursor: pointer;
+  font-size: 13px;
+  width: 2em;
+  height: 2em;
+  user-select: none;
+  border: 3px solid black;
+  display: block;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.checkmark:after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  background-color: black;
+  width: 50%;
+  height: 50%;
+  transform: scale(0);
+  transition: .1s ease;
+}
+
+.checkbox_container input:checked~.checkmark:after {
+  transform: scale(1);
 }

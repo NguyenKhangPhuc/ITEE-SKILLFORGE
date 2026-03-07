@@ -1,9 +1,15 @@
-'use client'
 import Link from "next/link"
+import { getAllEvents } from "../actions/events"
+import EventsClient from "./EventsClient";
 
-const Home = () => {
+const Home = async () => {
+    const { data: events, error } = await getAllEvents();
+
+    if (error) {
+        return <div className="w-full flex items-center justify-center text-red-500">Đã có lỗi xảy ra: {error.message}</div>;
+    }
     return (
-        <div className="w-full min-h-screen screen-bg">
+        <div className="w-full min-h-screen screen-bg font-roboto-mono">
             <div className="max-w-4xl mx-auto px-6 flex flex-col p-5 ">
 
                 <Link href={'/events/create'} className="create-button w-40 h-10">
@@ -20,7 +26,7 @@ const Home = () => {
                         ></path>
                     </svg>
                 </Link>
-
+                <EventsClient events={events ?? []} />
             </div>
         </div>
     )

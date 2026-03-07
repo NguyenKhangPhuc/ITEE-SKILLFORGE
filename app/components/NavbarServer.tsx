@@ -1,5 +1,5 @@
 import { createClient } from "../utils/supabase/server";
-import NavBar from "./navbar";
+import NavBar from "./Navbar";
 
 const NavbarServer = async () => {
     const supabase = await createClient();

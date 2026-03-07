@@ -49,3 +49,19 @@ export async function createEvent(event: EventInsert, challenges: Array<EventIns
     revalidatePath('/events');
     return data
 }
+
+export async function getAllEvents() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.from("events").select("*");
+
+    return { data, error }
+}
+
+export async function getSingleEvent(id: string) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.from("events").select("*").eq("id", id).single();
+
+    return { data, error }
+}

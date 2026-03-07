@@ -51,7 +51,7 @@ body,
 }
 
 .tiptap.ProseMirror {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-mono), monospace;
 }
 
 .simple-editor-wrapper {

@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Roboto_Mono } from "next/font/google";
 
 import "./globals.css";
-import NotificationCard from "./components/notification";
+import NotificationCard from "./components/Notification";
 import { NotificationProvider } from "./context/NotificationContext";
-import NavbarServer from "./components/navbar_server";
+import NavbarServer from "./components/NavbarServer";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
