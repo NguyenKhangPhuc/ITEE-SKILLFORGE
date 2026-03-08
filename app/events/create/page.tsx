@@ -157,7 +157,7 @@ const Home = () => {
                     </div>
                     <button
                         type="submit"
-                        className="cursor-pointer px-6 py-2 rounded-md bg-black/20 hover:bg-black/30 transition-colors duration-300 text-black"
+                        className="cursor-pointer px-6 py-2 rounded-md bg-black hover:bg-black/80 transition-colors duration-300 text-white"
                     >
                         Create New
                     </button>

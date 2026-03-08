@@ -122,6 +122,52 @@ export type Database = {
           },
         ]
       }
+      group_challenge: {
+        Row: {
+          challenge_id: string | null
+          created_at: string
+          event_id: string | null
+          group_id: string | null
+          id: string
+        }
+        Insert: {
+          challenge_id?: string | null
+          created_at?: string
+          event_id?: string | null
+          group_id?: string | null
+          id?: string
+        }
+        Update: {
+          challenge_id?: string | null
+          created_at?: string
+          event_id?: string | null
+          group_id?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_challenge_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "event_challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_challenge_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_challenge_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       group_members: {
         Row: {
           created_at: string
@@ -252,6 +298,54 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      submissions: {
+        Row: {
+          created_at: string
+          description: string | null
+          github_link: string | null
+          group_challenge_id: string | null
+          group_id: string | null
+          id: string
+          short_description: string | null
+          youtube_link: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          github_link?: string | null
+          group_challenge_id?: string | null
+          group_id?: string | null
+          id?: string
+          short_description?: string | null
+          youtube_link?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          github_link?: string | null
+          group_challenge_id?: string | null
+          group_id?: string | null
+          id?: string
+          short_description?: string | null
+          youtube_link?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_group_challenge_id_fkey"
+            columns: ["group_challenge_id"]
+            isOneToOne: false
+            referencedRelation: "group_challenge"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submissions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

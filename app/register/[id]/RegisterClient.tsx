@@ -36,6 +36,8 @@ const RegisterClient = ({ event, user, challenges }: { event: Event, user: User,
 
         try {
             await insertGroupMembers(data)
+            showNotification('Create group successfully')
+
         } catch (error) {
             if (error instanceof Error) {
                 showNotification(error.message)

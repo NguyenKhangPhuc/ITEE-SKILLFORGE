@@ -183,7 +183,7 @@ const MobileToolbarContent = ({
   </>
 )
 
-export function SimpleEditor({ onEditorReady }: { onEditorReady: React.Dispatch<SetStateAction<Editor | null>> }) {
+export function SimpleEditor({ initialContent, onEditorReady }: { initialContent: string | null, onEditorReady: React.Dispatch<SetStateAction<Editor | null>> }) {
   const isMobile = useIsBreakpoint()
   const { height } = useWindowSize()
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
@@ -228,13 +228,21 @@ export function SimpleEditor({ onEditorReady }: { onEditorReady: React.Dispatch<
         onError: (error) => console.error("Upload failed:", error),
       }),
     ],
-    content,
+    content: initialContent,
   })
 
   const rect = useCursorVisibility({
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   })
+
+  useEffect(() => {
+    if (editor && initialContent !== null) {
+      editor.commands.setContent(initialContent);
+    } else if (editor && initialContent == null) {
+      editor.commands.setContent(content);
+    }
+  }, [initialContent, editor]);
 
   useEffect(() => {
     if (editor) {
