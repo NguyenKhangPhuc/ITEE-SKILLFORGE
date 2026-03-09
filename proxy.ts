@@ -1,6 +1,7 @@
 import { type NextRequest } from "next/server"
 import { updateSession } from "./app/utils/supabase/proxy"
 import { registerRoute } from "./app/middleware/register_proxy"
+import { submissionRoute } from "./app/middleware/submission_proxy"
 
 
 export async function proxy(request: NextRequest) {
@@ -8,6 +9,8 @@ export async function proxy(request: NextRequest) {
     if (supabaseResponse.status !== 200) return supabaseResponse
     const registerRouteCheck = await registerRoute(request)
     if (registerRouteCheck.status !== 200) return registerRouteCheck
+    const submissionRouteCheck = await submissionRoute(request)
+    if (submissionRouteCheck.status !== 200) return submissionRouteCheck
 }
 
 export const config = {
