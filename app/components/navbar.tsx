@@ -34,40 +34,22 @@ const NavBar = ({ initialUser }: { initialUser: User | null }) => {
 
                     <div className="hidden md:flex gap-6 items-center">
                         <Link
-                            href="#about"
-                            className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors duration-200"
-                        >
-                            About
-                        </Link>
-                        <Link
-                            href="#jobs"
-                            className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors duration-200"
-                        >
-                            Jobs
-                        </Link>
-                        <Link
                             href="/events"
                             className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors duration-200"
                         >
                             Events
                         </Link>
                         <Link
-                            href="#teams"
+                            href={`/groups`}
                             className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors duration-200"
                         >
-                            Teams
+                            Groups
                         </Link>
                         <Link
-                            href="#blogs"
+                            href="/profile"
                             className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors duration-200"
                         >
-                            Blogs
-                        </Link>
-                        <Link
-                            href="#faq"
-                            className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors duration-200"
-                        >
-                            FAQ
+                            Profile
                         </Link>
 
                         <div className="absolute right-6 top-1/2 -translate-y-1/2">

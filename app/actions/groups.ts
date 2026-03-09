@@ -15,3 +15,21 @@ export async function getUserGroups() {
 
     return { data, error }
 }
+
+export async function getSingleGroup({ groupId }: { groupId: string }) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.from('groups')
+        .select('*, group_members (id, profiles (id, email)), events (title, max_group_members)').eq('id', groupId).single();
+
+    return { data, error }
+}
+
+export async function updateGroupName({ groupId, groupName }: { groupId: string, groupName: string }) {
+    const supabase = await createClient()
+    const { data, error } = await supabase.from('groups').update({ group_name: groupName }).eq('id', groupId).select().maybeSingle();
+    if (error) {
+        throw new Error(error.message)
+    }
+    return data
+}

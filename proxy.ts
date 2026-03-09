@@ -1,10 +1,13 @@
 import { type NextRequest } from "next/server"
 import { updateSession } from "./app/utils/supabase/proxy"
+import { registerRoute } from "./app/middleware/register_proxy"
 
 
 export async function proxy(request: NextRequest) {
-    console.log('Checking page')
-    return await updateSession(request)
+    const supabaseResponse = await updateSession(request)
+    if (supabaseResponse.status !== 200) return supabaseResponse
+    const registerRouteCheck = await registerRoute(request)
+    if (registerRouteCheck.status !== 200) return registerRouteCheck
 }
 
 export const config = {

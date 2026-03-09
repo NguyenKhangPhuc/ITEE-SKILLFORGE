@@ -153,7 +153,7 @@ const Home = () => {
                         )}
                     </div>
                     <div className="shadow-xl/30 inset-shadow-sm rounded-xl ">
-                        <SimpleEditor onEditorReady={setEditorValue} />
+                        <SimpleEditor initialContent={null} onEditorReady={setEditorValue} />
                     </div>
                     <button
                         type="submit"
